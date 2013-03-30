@@ -1,6 +1,7 @@
 package ua.net.tokar.ogame;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -33,7 +34,15 @@ class Ship {
         return attack;
     }
 
-    public boolean attack( Ship target ) {
+    public void attack( List<Ship> fleet ) {
+        boolean hasRapidfire;
+        do {
+            int idx = rnd.nextInt( fleet.size() );
+            hasRapidfire = doFire( fleet.get( idx ) );
+        } while ( hasRapidfire );
+    }
+
+    public boolean doFire( Ship target ) {
         target.receiveDamage( attack );
 
         Integer rapidCnt = this.rapidfire.get( target.type );

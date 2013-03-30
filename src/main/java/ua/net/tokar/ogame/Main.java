@@ -9,6 +9,9 @@ public class Main {
         defender.addFleet( Ship.Type.CRUISER, 5 );
 
         simulate( attacker, defender );
+
+        System.out.println( "Attacker: " + attacker );
+        System.out.println( "Defender: " + defender );
     }
 
     private static int MAX_ROUNDS = 6;
@@ -19,16 +22,10 @@ public class Main {
             defender.prepareForNextRound();
 
             for ( Ship attackerShip : attacker.getFleet() ) {
-                boolean hasRapidfire;
-                do {
-                    hasRapidfire = attackerShip.attack( defender.getTarget() );
-                } while ( hasRapidfire );
+                attackerShip.attack( defender.getFleet() );
             }
             for ( Ship defenderShip : defender.getFleet() ) {
-                boolean hasRapidfire;
-                do {
-                    hasRapidfire = defenderShip.attack( attacker.getTarget() );
-                } while ( hasRapidfire );
+                defenderShip.attack( attacker.getFleet() );
             }
 
             attacker.calculateLosses();
@@ -38,9 +35,6 @@ public class Main {
                 break;
             }
         }
-
-        System.out.println( "Attacker: " + attacker );
-        System.out.println( "Defender: " + defender );
     }
 }
 

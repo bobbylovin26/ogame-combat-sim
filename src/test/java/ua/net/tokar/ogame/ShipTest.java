@@ -79,7 +79,7 @@ public class ShipTest {
         Ship shipForRapidfire = new Ship( Ship.Type.LF, NONE_RESEARCHES );
         Ship shipWithoutRapidfire = new Ship( Ship.Type.HF, NONE_RESEARCHES );
 
-        Assert.assertTrue( cruiser.attack( shipForRapidfire ) );
-        Assert.assertFalse( cruiser.attack( shipWithoutRapidfire ) );
+        Assert.assertTrue( cruiser.doFire( shipForRapidfire ) );
+        Assert.assertFalse( cruiser.doFire( shipWithoutRapidfire ) );
     }
 }

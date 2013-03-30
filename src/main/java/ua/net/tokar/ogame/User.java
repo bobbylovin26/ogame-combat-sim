@@ -1,6 +1,7 @@
 package ua.net.tokar.ogame;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -22,13 +23,8 @@ class User {
         }
     }
 
-    public Ship getTarget() {
-        int idx = rnd.nextInt( fleet.size() );
-        return fleet.get( idx );
-    }
-
     public List<Ship> getFleet() {
-        return fleet;
+        return Collections.unmodifiableList( fleet );
     }
 
     public void prepareForNextRound() {
