@@ -13,22 +13,28 @@ class Ship {
     private final Map<Type, Integer> rapidfire = new HashMap<Type, Integer>();
     private final Type type;
     private final Researches researches;
+    private final double basicShields;
+    private final double attack;
+    private final double basicStructure;
 
     public Ship( Type type, Researches researches ) {
         this.type = type;
         this.researches = researches;
+        this.basicShields = type.basicShields + type.basicShields * 0.1 * researches.getShields();
+        this.attack = this.type.basicAttack + this.type.basicAttack * 0.1 * researches.getAttack();
 
-        this.structure = type.basicStructure + type.basicStructure * 0.1 * researches.getDefence();
+        this.basicStructure = type.basicStructure + type.basicStructure * 0.1 * researches.getDefence();
+        this.structure = basicStructure;
 
         prepareForNextRound();
     }
 
     public double getAttack() {
-        return this.type.basicAttack + this.type.basicAttack * 0.1 * researches.getAttack();
+        return attack;
     }
 
     public boolean attack( Ship target ) {
-        target.receiveDamage( getAttack() );
+        target.receiveDamage( attack );
 
         Integer rapidCnt = this.rapidfire.get( target.type );
         boolean hasRapid = rapidCnt != null && rapidCnt > 1;
@@ -44,14 +50,19 @@ class Ship {
             damageToStructure = damage - shields;
             shields = 0;
         } else {
-            shields -= Math.floor( damage / ( shields / 100 ) ) * ( shields / 100 );
+            double shieldMinConsumptionPart = shields / 100;
+            shields -= Math.floor( damage / shieldMinConsumptionPart ) * shieldMinConsumptionPart;
         }
 
         structure -= damageToStructure;
 
-        if ( structure <= 0 || this.structure / this.type.basicStructure <= CAN_EXPLODE ) {
-            isExplode = isExplode || rnd.nextInt( 100 ) < ( 100 - ( structure / type.basicStructure ) * 100 );
+        if ( structure <= 0 || getDamagePart() <= CAN_EXPLODE ) {
+            isExplode = isExplode || rnd.nextDouble() < ( 1 - getDamagePart() );
         }
+    }
+
+    private double getDamagePart() {
+        return structure / basicStructure;
     }
 
     public boolean isSurvive() {
@@ -62,7 +73,7 @@ class Ship {
     public void prepareForNextRound() {
         this.rapidfire.putAll( type.rapidfire );
 
-        this.shields = type.basicShields + type.basicShields * 0.1 * researches.getShields();
+        this.shields = basicShields;
     }
 
     public double getDefence() {
@@ -107,9 +118,9 @@ class Ship {
 
         RL( 200, 20, 80, new HashMap<Type, Integer>() ), // rocket launcher
         ;
-        private double basicStructure;
-        private double basicShields;
-        private double basicAttack;
+        public final double basicStructure;
+        public final double basicShields;
+        public final double basicAttack;
         private Map<Type, Integer> rapidfire = new HashMap<Type, Integer>();
 
         private Type( double basicStructure, double basicShields, double basicAttack, Map<Type, Integer> rapidfire ) {

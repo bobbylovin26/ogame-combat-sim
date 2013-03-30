@@ -6,7 +6,7 @@ public class Main {
         attacker.addFleet( Ship.Type.LF, 100 );
 
         User defender = new User( new Researches( 8, 7, 8 ) );
-        defender.addFleet( Ship.Type.CRUISER, 10 );
+        defender.addFleet( Ship.Type.CRUISER, 5 );
 
         simulate( attacker, defender );
     }

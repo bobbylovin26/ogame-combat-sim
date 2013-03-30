@@ -11,9 +11,9 @@ public class ShipTest {
     public void basicShipCharacteristics() {
         Ship cruiser = new Ship( Ship.Type.CRUISER, NONE_RESEARCHES );
 
-        Assert.assertEquals( 2700.0, cruiser.getDefence() );
-        Assert.assertEquals( 50.0, cruiser.getShields() );
-        Assert.assertEquals( 400.0, cruiser.getAttack() );
+        Assert.assertEquals( Ship.Type.CRUISER.basicStructure, cruiser.getDefence() );
+        Assert.assertEquals( Ship.Type.CRUISER.basicShields, cruiser.getShields() );
+        Assert.assertEquals( Ship.Type.CRUISER.basicAttack, cruiser.getAttack() );
     }
 
     @Test
@@ -30,10 +30,10 @@ public class ShipTest {
         Ship cruiser = new Ship( Ship.Type.CRUISER, NONE_RESEARCHES );
 
         cruiser.receiveDamage( 0.1 );
-        Assert.assertEquals( 50.0, cruiser.getShields() );
+        Assert.assertEquals( Ship.Type.CRUISER.basicShields, cruiser.getShields() );
 
         cruiser.receiveDamage( 0.4 );
-        Assert.assertEquals( 50.0, cruiser.getShields() );
+        Assert.assertEquals( Ship.Type.CRUISER.basicShields, cruiser.getShields() );
 
         cruiser.receiveDamage( 1 );
         Assert.assertEquals( 49.0, cruiser.getShields() );
@@ -44,7 +44,7 @@ public class ShipTest {
         Ship cruiser = new Ship( Ship.Type.CRUISER, NONE_RESEARCHES );
 
         cruiser.receiveDamage( 50 );
-        Assert.assertEquals( 2700.0, cruiser.getDefence() );
+        Assert.assertEquals( Ship.Type.CRUISER.basicStructure, cruiser.getDefence() );
 
         cruiser.receiveDamage( 50 );
         Assert.assertEquals( 2650.0, cruiser.getDefence() );
@@ -69,7 +69,7 @@ public class ShipTest {
         cruiser.prepareForNextRound();
 
         Assert.assertEquals( 2000.0, cruiser.getDefence() );
-        Assert.assertEquals( 50.0, cruiser.getShields() );
+        Assert.assertEquals( Ship.Type.CRUISER.basicShields, cruiser.getShields() );
     }
 
     @Test
