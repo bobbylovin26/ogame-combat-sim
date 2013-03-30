@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 public class Main {
+    private static final int MAX_ROUNDS = 6;
+    private final static double STRUCTURE_INTO_DEBRIS_FACTOR = 0.3;
+
     public static void main( String[] args ) {
         User attacker = new User( new Researches( 8, 7, 8 ) );
         attacker.addFleet( Ship.Type.LF, 100 );
@@ -29,6 +32,10 @@ public class Main {
 
         System.out.println( "Attacker loss: " + attackerLoss );
         System.out.println( "Defender loss: " + defenderLoss );
+
+        Price debris = attackerLoss.add( defenderLoss ).withoutDeuterium().mul( STRUCTURE_INTO_DEBRIS_FACTOR );
+
+        System.out.println( "Debris: " + debris );
     }
 
     private static Price calculateLoss( Map<Ship.Type, Integer> shipsByTypeBefore, Map<Ship.Type, Integer> shipsByTypeAfter ) {
@@ -57,8 +64,6 @@ public class Main {
 
         return shipsByType;
     }
-
-    private static int MAX_ROUNDS = 6;
 
     private static void simulate( User attacker, User defender ) {
         for ( int round = 0; round < MAX_ROUNDS; round++ ) {

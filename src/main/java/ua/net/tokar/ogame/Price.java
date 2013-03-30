@@ -19,12 +19,16 @@ public class Price {
         return new Price( metal, crystal, deuterium );
     }
 
-    public Price mul( int factor ) {
-        int metal = this.metal * factor;
-        int crystal = this.crystal * factor;
-        int deuterium = this.deuterium * factor;
+    public Price mul( double factor ) {
+        int metal = (int) ( this.metal * factor );
+        int crystal = (int) ( this.crystal * factor );
+        int deuterium = (int) ( this.deuterium * factor );
 
         return new Price( metal, crystal, deuterium );
+    }
+
+    public Price withoutDeuterium() {
+        return new Price( metal, crystal, 0 );
     }
 
     @Override
