@@ -20,13 +20,13 @@ public class Main {
             defender.prepareForNextRound();
 
             for ( Ship attackerShip : attacker.getFleet() ) {
-                boolean hasRapidfire = false;
+                boolean hasRapidfire;
                 do {
                     hasRapidfire = attackerShip.attack( defender.getTarget() );
                 } while ( hasRapidfire );
             }
             for ( Ship defenderShip : defender.getFleet() ) {
-                boolean hasRapidfire = false;
+                boolean hasRapidfire;
                 do {
                     hasRapidfire = defenderShip.attack( attacker.getTarget() );
                 } while ( hasRapidfire );

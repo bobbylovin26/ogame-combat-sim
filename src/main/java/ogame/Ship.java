@@ -10,18 +10,25 @@ class Ship {
     private boolean isExplode = false;
     private double structure;
     private double shield;
-    private Map<Type, Integer> rapidfire = new HashMap<Type, Integer>();
-    private Type type;
+    private final Map<Type, Integer> rapidfire = new HashMap<Type, Integer>();
+    private final Type type;
+    private final Researches researches;
 
-    Ship( Type type ) {
+    public Ship( Type type, Researches researches ) {
         this.type = type;
-        this.structure = type.structure;
+        this.researches = researches;
 
-        this.prepareForNextRound();
+        this.structure = type.basicStructure + type.basicStructure * 0.1 * researches.getDefence();
+
+        prepareForNextRound();
+    }
+
+    private double getAttack() {
+        return this.type.basicAttack + this.type.basicAttack * 0.1 * researches.getAttack();
     }
 
     public boolean attack( Ship target ) {
-        target.receiveDamage( this.type.attack );
+        target.receiveDamage( getAttack() );
 
         Integer rapidCnt = this.rapidfire.get( target.type );
         boolean hasRapid = rapidCnt != null && rapidCnt > 1;
@@ -42,8 +49,8 @@ class Ship {
 
         structure -= damageToStructure;
 
-        if ( structure <= 0 || this.structure / this.type.structure <= CAN_EXPLODE ) {
-            isExplode = isExplode || rnd.nextInt( 100 ) < ( 100 - ( structure / type.structure ) * 100 );
+        if ( structure <= 0 || this.structure / this.type.basicStructure <= CAN_EXPLODE ) {
+            isExplode = isExplode || rnd.nextInt( 100 ) < ( 100 - ( structure / type.basicStructure ) * 100 );
         }
     }
 
@@ -55,7 +62,7 @@ class Ship {
     public void prepareForNextRound() {
         this.rapidfire.putAll( type.rapidfire );
 
-        this.shield = type.shield;
+        this.shield = type.basicShields + type.basicShields * 0.1 * researches.getShields();
     }
 
     public static enum Type {
@@ -83,24 +90,25 @@ class Ship {
             put( SS, 5 );
         }} ),
         EP( 100, 0.01, 0.01, new HashMap<Type, Integer>() ),// espionage probe
-        SS( 200, 1, 1, new HashMap<Type, Integer>() ), // solar satelite
+        SS( 200, 1, 1, new HashMap<Type, Integer>() ), // solar satellite
         LINKOR( 6000, 200, 1000, new HashMap<Type, Integer>() {{ // linkor
             put( EP, 5 );
             put( SS, 5 );
         }} ),
 
 
-        RL( 200, 20, 80, new HashMap<Type, Integer>() ), // rocket louncher
+        RL( 200, 20, 80, new HashMap<Type, Integer>() ), // rocket launcher
         ;
-        private double structure;
-        private double shield;
-        private double attack;
+        private double basicStructure;
+        private double basicShields;
+        private double basicAttack;
         private Map<Type, Integer> rapidfire = new HashMap<Type, Integer>();
 
-        private Type( double structure, double shield, double attack, Map<Type, Integer> rapidfire ) {
-            this.structure = structure;
-            this.shield = shield;
-            this.attack = attack;
+        private Type( double basicStructure, double basicShields, double basicAttack, Map<Type, Integer> rapidfire ) {
+            this.basicStructure = basicStructure;
+            this.basicShields = basicShields;
+            this.basicAttack = basicAttack;
+
             this.rapidfire.putAll( rapidfire );
         }
 

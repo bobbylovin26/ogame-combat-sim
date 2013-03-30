@@ -18,7 +18,7 @@ class User {
 
     public void addFleet( Ship.Type type, int count ) {
         for ( int i = 0; i < count; i++ ) {
-            fleet.add( new Ship( type ) );
+            fleet.add( new Ship( type, researches ) );
         }
     }
 
