@@ -6,20 +6,23 @@ import java.util.List;
 import java.util.Map;
 
 public class Main {
-    private static final int MAX_ROUNDS = 6;
+    private final static int MAX_ROUNDS = 6;
+    private final static int RECYCLER_CAPACITY = 20000;
     private final static double STRUCTURE_INTO_DEBRIS_FACTOR = 0.3;
 
     public static void main( String[] args ) {
         User attacker = new User( new Researches( 8, 7, 8 ) );
-        attacker.addFleet( Ship.Type.LF, 100 );
+        attacker.addFleet( Ship.Type.CRUISER, 10 );
 
         User defender = new User( new Researches( 8, 7, 8 ) );
-        defender.addFleet( Ship.Type.CRUISER, 5 );
+        defender.addFleet( Ship.Type.LF, 100 );
 
         Map<Ship.Type, Integer> attackerShipsByTypeBeforeBattle = getShipsByType( attacker.getFleet() );
         Map<Ship.Type, Integer> defenderShipsByTypeBeforeBattle = getShipsByType( defender.getFleet() );
 
         simulate( attacker, defender );
+
+        // --------  REPORT  -----------
 
         Map<Ship.Type, Integer> attackerShipsByTypeAfterBattle = getShipsByType( attacker.getFleet() );
         Map<Ship.Type, Integer> defenderShipsByTypeAfterBattle = getShipsByType( defender.getFleet() );
@@ -30,12 +33,16 @@ public class Main {
         System.out.println( "Attacker: " + attacker );
         System.out.println( "Defender: " + defender );
 
+        Price debris = attackerLoss.add( defenderLoss ).withoutDeuterium().mul( STRUCTURE_INTO_DEBRIS_FACTOR );
+        System.out.println( "Debris: " + debris );
+        System.out.println( "Recyclers cnt: " + (int) Math.ceil( (double) ( debris.metal + debris.crystal ) / RECYCLER_CAPACITY ) );
+
         System.out.println( "Attacker loss: " + attackerLoss );
         System.out.println( "Defender loss: " + defenderLoss );
 
-        Price debris = attackerLoss.add( defenderLoss ).withoutDeuterium().mul( STRUCTURE_INTO_DEBRIS_FACTOR );
+        System.out.println( "Attacker gain: " + debris.add( attackerLoss.mul( -1 ) ) );
+        System.out.println( "Defender gain: " + debris.add( defenderLoss.mul( -1 ) ) );
 
-        System.out.println( "Debris: " + debris );
     }
 
     private static Price calculateLoss( Map<Ship.Type, Integer> shipsByTypeBefore, Map<Ship.Type, Integer> shipsByTypeAfter ) {
