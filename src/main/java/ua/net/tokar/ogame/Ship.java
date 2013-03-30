@@ -94,46 +94,46 @@ class Ship {
     }
 
     public static enum Type {
-        LF( 400, 10, 50, new HashMap<Type, Integer>() {{ // light fighter
+        LF( new Price( 3000, 1000, 0 ), 10, 50, new HashMap<Type, Integer>() {{ // light fighter
             put( EP, 5 );
             put( SS, 5 );
         }} ),
-        HF( 1000, 25, 150, new HashMap<Type, Integer>() {{ // heavy fighter
+        HF( new Price( 6000, 4000, 0 ), 25, 150, new HashMap<Type, Integer>() {{ // heavy fighter
             put( EP, 5 );
             put( SS, 5 );
             put( SC, 3 );
         }} ),
-        CRUISER( 2700, 50, 400, new HashMap<Type, Integer>() {{  // cruiser
+        CRUISER( new Price( 20000, 7000, 2000 ), 50, 400, new HashMap<Type, Integer>() {{  // cruiser
             put( EP, 5 );
             put( SS, 5 );
             put( LF, 6 );
             put( RL, 10 );
         }} ),
-        SC( 400, 10, 5, new HashMap<Type, Integer>() {{ // small cargo
+        LINKOR( new Price( 45000, 150000, 0 ), 200, 1000, new HashMap<Type, Integer>() {{ // linkor
             put( EP, 5 );
             put( SS, 5 );
         }} ),
-        LC( 1200, 25, 5, new HashMap<Type, Integer>() {{ // large cargo
+        SC( new Price( 2000, 2000, 0 ), 10, 5, new HashMap<Type, Integer>() {{ // small cargo
             put( EP, 5 );
             put( SS, 5 );
         }} ),
-        EP( 100, 0.01, 0.01, new HashMap<Type, Integer>() ),// espionage probe
-        SS( 200, 1, 1, new HashMap<Type, Integer>() ), // solar satellite
-        LINKOR( 6000, 200, 1000, new HashMap<Type, Integer>() {{ // linkor
+        LC( new Price( 6000, 6000, 0 ), 25, 5, new HashMap<Type, Integer>() {{ // large cargo
             put( EP, 5 );
             put( SS, 5 );
         }} ),
+        EP( new Price( 0, 1000, 0 ), 0.01, 0.01, new HashMap<Type, Integer>() ),// espionage probe
+        SS( new Price( 0, 2000, 500 ), 1, 1, new HashMap<Type, Integer>() ), // solar satellite
 
 
-        RL( 200, 20, 80, new HashMap<Type, Integer>() ), // rocket launcher
+        RL( new Price( 2000, 0, 0 ), 20, 80, new HashMap<Type, Integer>() ), // rocket launcher
         ;
         public final double basicStructure;
         public final double basicShields;
         public final double basicAttack;
         private Map<Type, Integer> rapidfire = new HashMap<Type, Integer>();
 
-        private Type( double basicStructure, double basicShields, double basicAttack, Map<Type, Integer> rapidfire ) {
-            this.basicStructure = basicStructure;
+        private Type( Price price, double basicShields, double basicAttack, Map<Type, Integer> rapidfire ) {
+            this.basicStructure = ( price.crystal + price.metal ) / 10;
             this.basicShields = basicShields;
             this.basicAttack = basicAttack;
 
