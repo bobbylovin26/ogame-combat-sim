@@ -93,6 +93,10 @@ class Ship {
         return shields;
     }
 
+    public Type getType() {
+        return type;
+    }
+
     public static enum Type {
         LF( new Price( 3000, 1000, 0 ), 10, 50, new HashMap<Type, Integer>() {{ // light fighter
             put( EP, 5 );
@@ -130,9 +134,11 @@ class Ship {
         public final double basicStructure;
         public final double basicShields;
         public final double basicAttack;
+        public final Price price;
         private Map<Type, Integer> rapidfire = new HashMap<Type, Integer>();
 
         private Type( Price price, double basicShields, double basicAttack, Map<Type, Integer> rapidfire ) {
+            this.price = price;
             this.basicStructure = ( price.crystal + price.metal ) / 10;
             this.basicShields = basicShields;
             this.basicAttack = basicAttack;

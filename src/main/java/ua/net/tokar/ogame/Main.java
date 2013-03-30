@@ -1,5 +1,10 @@
 package ua.net.tokar.ogame;
 
+import com.google.common.collect.Maps;
+
+import java.util.List;
+import java.util.Map;
+
 public class Main {
     public static void main( String[] args ) {
         User attacker = new User( new Researches( 8, 7, 8 ) );
@@ -8,10 +13,49 @@ public class Main {
         User defender = new User( new Researches( 8, 7, 8 ) );
         defender.addFleet( Ship.Type.CRUISER, 5 );
 
+        Map<Ship.Type, Integer> attackerShipsByTypeBeforeBattle = getShipsByType( attacker.getFleet() );
+        Map<Ship.Type, Integer> defenderShipsByTypeBeforeBattle = getShipsByType( defender.getFleet() );
+
         simulate( attacker, defender );
+
+        Map<Ship.Type, Integer> attackerShipsByTypeAfterBattle = getShipsByType( attacker.getFleet() );
+        Map<Ship.Type, Integer> defenderShipsByTypeAfterBattle = getShipsByType( defender.getFleet() );
+
+        Price attackerLoss = calculateLoss( attackerShipsByTypeBeforeBattle, attackerShipsByTypeAfterBattle );
+        Price defenderLoss = calculateLoss( defenderShipsByTypeBeforeBattle, defenderShipsByTypeAfterBattle );
 
         System.out.println( "Attacker: " + attacker );
         System.out.println( "Defender: " + defender );
+
+        System.out.println( "Attacker loss: " + attackerLoss );
+        System.out.println( "Defender loss: " + defenderLoss );
+    }
+
+    private static Price calculateLoss( Map<Ship.Type, Integer> shipsByTypeBefore, Map<Ship.Type, Integer> shipsByTypeAfter ) {
+        Price gain = new Price( 0, 0, 0 );
+
+        for ( Map.Entry<Ship.Type, Integer> e : shipsByTypeBefore.entrySet() ) {
+            int shipsDiff = shipsByTypeBefore.get( e.getKey() );
+            try {
+                shipsDiff -= shipsByTypeAfter.get( e.getKey() );
+            } catch ( NullPointerException npe ) {
+                // no ships after battle
+            }
+            gain = gain.add( e.getKey().price.mul( shipsDiff ) );
+
+        }
+
+        return gain;
+    }
+
+    private static Map<Ship.Type, Integer> getShipsByType( List<Ship> fleet ) {
+        Map<Ship.Type, Integer> shipsByType = Maps.newHashMap();
+        for ( Ship s : fleet ) {
+            Integer cnt = shipsByType.get( s.getType() );
+            shipsByType.put( s.getType(), ( cnt == null ? 1 : cnt + 1 ) );
+        }
+
+        return shipsByType;
     }
 
     private static int MAX_ROUNDS = 6;
