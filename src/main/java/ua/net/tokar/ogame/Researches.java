@@ -1,4 +1,4 @@
-package ogame;
+package ua.net.tokar.ogame;
 
 class Researches {
     private int defence = 0;

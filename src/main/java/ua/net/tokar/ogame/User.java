@@ -1,4 +1,4 @@
-package ogame;
+package ua.net.tokar.ogame;
 
 import java.util.ArrayList;
 import java.util.List;

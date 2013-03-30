@@ -1,4 +1,4 @@
-package ogame;
+package ua.net.tokar.ogame;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +9,7 @@ class Ship {
     private Random rnd = new Random();
     private boolean isExplode = false;
     private double structure;
-    private double shield;
+    private double shields;
     private final Map<Type, Integer> rapidfire = new HashMap<Type, Integer>();
     private final Type type;
     private final Researches researches;
@@ -23,7 +23,7 @@ class Ship {
         prepareForNextRound();
     }
 
-    private double getAttack() {
+    public double getAttack() {
         return this.type.basicAttack + this.type.basicAttack * 0.1 * researches.getAttack();
     }
 
@@ -38,13 +38,13 @@ class Ship {
         return hasRapid;
     }
 
-    private void receiveDamage( double damage ) {
+    public void receiveDamage( double damage ) {
         double damageToStructure = 0;
-        if ( damage >= shield ) {
-            damageToStructure = damage - shield;
-            shield = 0;
+        if ( damage >= shields ) {
+            damageToStructure = damage - shields;
+            shields = 0;
         } else {
-            shield -= Math.floor( damage / ( shield / 100 ) ) * ( shield / 100 );
+            shields -= Math.floor( damage / ( shields / 100 ) ) * ( shields / 100 );
         }
 
         structure -= damageToStructure;
@@ -62,7 +62,15 @@ class Ship {
     public void prepareForNextRound() {
         this.rapidfire.putAll( type.rapidfire );
 
-        this.shield = type.basicShields + type.basicShields * 0.1 * researches.getShields();
+        this.shields = type.basicShields + type.basicShields * 0.1 * researches.getShields();
+    }
+
+    public double getDefence() {
+        return structure;
+    }
+
+    public double getShields() {
+        return shields;
     }
 
     public static enum Type {

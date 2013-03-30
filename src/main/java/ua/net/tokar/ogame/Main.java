@@ -1,4 +1,4 @@
-package ogame;
+package ua.net.tokar.ogame;
 
 public class Main {
     public static void main( String[] args ) {
@@ -15,7 +15,6 @@ public class Main {
 
     private static void simulate( User attacker, User defender ) {
         for ( int round = 0; round < MAX_ROUNDS; round++ ) {
-            System.out.println( String.format( "Round %d starts", round + 1 ) );
             attacker.prepareForNextRound();
             defender.prepareForNextRound();
 
@@ -35,12 +34,13 @@ public class Main {
             attacker.calculateLosses();
             defender.calculateLosses();
 
-            System.out.println( "Attacker: " + attacker );
-            System.out.println( "Defender: " + defender );
             if ( attacker.isDefeated() || defender.isDefeated() ) {
                 break;
             }
         }
+
+        System.out.println( "Attacker: " + attacker );
+        System.out.println( "Defender: " + defender );
     }
 }
 
