@@ -20,13 +20,13 @@ class Ship {
         this.prepareForNextRound();
     }
 
-    public boolean attack( Ship dfShip ) {
-        dfShip.receiveDamage( this.type.attack );
+    public boolean attack( Ship target ) {
+        target.receiveDamage( this.type.attack );
 
-        Integer rapidCnt = this.rapidfire.get( dfShip.type );
+        Integer rapidCnt = this.rapidfire.get( target.type );
         boolean hasRapid = rapidCnt != null && rapidCnt > 1;
         if ( rapidCnt != null ) {
-            this.rapidfire.put( dfShip.type, rapidCnt - 1 );
+            this.rapidfire.put( target.type, rapidCnt - 1 );
         }
         return hasRapid;
     }
@@ -54,12 +54,8 @@ class Ship {
 
     public void prepareForNextRound() {
         this.rapidfire.putAll( type.rapidfire );
-        ;
-        this.shield = type.shield;
-    }
 
-    public Type getType() {
-        return type;
+        this.shield = type.shield;
     }
 
     public static enum Type {
