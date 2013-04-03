@@ -35,6 +35,10 @@ class Ship {
     }
 
     public void attack( List<Ship> fleet ) {
+        if ( fleet.isEmpty() ) {
+            return;
+        }
+
         boolean hasRapidfire;
         do {
             int idx = rnd.nextInt( fleet.size() );
@@ -113,7 +117,7 @@ class Ship {
             put( LF, 6 );
             put( RL, 10 );
         }} ),
-        LINKOR( new Price( 45000, 150000, 0 ), 200, 1000, new HashMap<Type, Integer>() {{ // linkor
+        BATTLESHIP( new Price( 45000, 150000, 0 ), 200, 1000, new HashMap<Type, Integer>() {{ // linkor
             put( EP, 5 );
             put( SS, 5 );
         }} ),

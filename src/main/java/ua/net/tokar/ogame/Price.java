@@ -31,6 +31,10 @@ public class Price {
         return new Price( metal, crystal, 0 );
     }
 
+    public int toMetal( double m, double c, double d ) {
+        return (int)(metal * m / m + crystal * m / c + deuterium * m / d);
+    }
+
     @Override
     public String toString() {
         return "Price{" +

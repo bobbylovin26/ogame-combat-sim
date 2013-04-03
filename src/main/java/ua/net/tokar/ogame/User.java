@@ -1,9 +1,8 @@
 package ua.net.tokar.ogame;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import com.google.common.collect.Maps;
+
+import java.util.*;
 
 /**
  * @author Alexey Tokar (azazeltap@yandex-team.ru)
@@ -39,6 +38,34 @@ class User {
                 fleet.remove( shipIdx );
             }
         }
+    }
+
+    public void setFleet( Map<Ship.Type, Integer> fleet ) {
+        this.fleet.clear();
+
+        for ( Map.Entry<Ship.Type, Integer> e : fleet.entrySet() ) {
+            addFleet( e.getKey(), e.getValue() );
+        }
+    }
+
+    public Price getFleetCost() {
+        Price cost = new Price( 0, 0, 0 );
+
+        for ( Ship s : fleet ) {
+            cost = cost.add( s.getType().price );
+        }
+
+        return cost;
+    }
+
+    public Map<Ship.Type, Integer> getShipsByType() {
+        Map<Ship.Type, Integer> shipsByType = Maps.newHashMap();
+        for ( Ship s : fleet ) {
+            Integer cnt = shipsByType.get( s.getType() );
+            shipsByType.put( s.getType(), ( cnt == null ? 1 : cnt + 1 ) );
+        }
+
+        return shipsByType;
     }
 
     public boolean isDefeated() {
