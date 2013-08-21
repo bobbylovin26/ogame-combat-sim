@@ -121,11 +121,24 @@ class Ship {
             put( EP, 5 );
             put( SS, 5 );
         }} ),
+        BATTLECRUISER( new Price( 30000, 40000, 15000 ), 400, 700, new HashMap<Type, Integer>() {{  // cruiser
+            put( EP, 5 );
+            put( SS, 5 );
+            put( SC, 3 );
+            put( LC, 3 );
+            put( HF, 4 );
+            put( CRUISER, 4 );
+            put( BATTLESHIP, 7 );
+        }} ),
         SC( new Price( 2000, 2000, 0 ), 10, 5, new HashMap<Type, Integer>() {{ // small cargo
             put( EP, 5 );
             put( SS, 5 );
         }} ),
         LC( new Price( 6000, 6000, 0 ), 25, 5, new HashMap<Type, Integer>() {{ // large cargo
+            put( EP, 5 );
+            put( SS, 5 );
+        }} ),
+        RECYCLER( new Price( 10000, 6000, 2000 ), 10, 1, new HashMap<Type, Integer>() {{ // large cargo
             put( EP, 5 );
             put( SS, 5 );
         }} ),
@@ -135,6 +148,8 @@ class Ship {
 
         RL( new Price( 2000, 0, 0 ), 20, 80, new HashMap<Type, Integer>() ), // rocket launcher
         ;
+
+
         public final double basicStructure;
         public final double basicShields;
         public final double basicAttack;
