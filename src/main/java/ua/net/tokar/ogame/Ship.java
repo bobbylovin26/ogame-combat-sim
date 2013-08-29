@@ -50,14 +50,20 @@ class Ship {
         target.receiveDamage( attack );
 
         Integer rapidCnt = this.rapidfire.get( target.type );
-        boolean hasRapid = rapidCnt != null && rapidCnt > 1;
-        if ( rapidCnt != null ) {
+        if ( rapidCnt != null && rapidCnt > 0 ) {
             this.rapidfire.put( target.type, rapidCnt - 1 );
         }
-        return hasRapid;
+
+        boolean canFireAgain = rapidCnt != null && rapidCnt > 1;
+
+        return canFireAgain;
     }
 
     public void receiveDamage( double damage ) {
+        if ( !isSurvive() ) {
+            return;
+        }
+
         double damageToStructure = 0;
         if ( damage >= shields ) {
             damageToStructure = damage - shields;
@@ -69,8 +75,9 @@ class Ship {
 
         structure -= damageToStructure;
 
-        if ( structure <= 0 || getDamagePart() <= CAN_EXPLODE ) {
-            isExplode = isExplode || rnd.nextDouble() < ( 1 - getDamagePart() );
+        double dmgPart = getDamagePart();
+        if ( structure <= 0 || dmgPart <= CAN_EXPLODE ) {
+            isExplode = isExplode || rnd.nextDouble() < ( 1 - dmgPart );
         }
     }
 
@@ -79,8 +86,8 @@ class Ship {
     }
 
     public boolean isSurvive() {
-        boolean isSurvive = this.structure > 0 && !isExplode;
-        return isSurvive;
+        boolean doNotSurvive = isExplode || this.structure <= 0;
+        return !doNotSurvive;
     }
 
     public void prepareForNextRound() {
@@ -154,11 +161,11 @@ class Ship {
         public final double basicShields;
         public final double basicAttack;
         public final Price price;
-        private Map<Type, Integer> rapidfire = new HashMap<Type, Integer>();
+        private final Map<Type, Integer> rapidfire = new HashMap<Type, Integer>();
 
         private Type( Price price, double basicShields, double basicAttack, Map<Type, Integer> rapidfire ) {
             this.price = price;
-            this.basicStructure = ( price.crystal + price.metal ) / 10;
+            this.basicStructure = (double) ( price.crystal + price.metal ) / 10.0;
             this.basicShields = basicShields;
             this.basicAttack = basicAttack;
 

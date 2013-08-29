@@ -15,8 +15,11 @@ public class Main {
     final public static int POPULATION_SIZE = 6;
 
     public static void main( String[] args ) {
+        long start = System.currentTimeMillis();
 //        simple();
         genetic();
+
+        System.out.println( String.format( "Elapsed: %dms", System.currentTimeMillis() - start ) );
     }
 
 
@@ -34,8 +37,8 @@ public class Main {
                 Ship.Type.EP,
                 Ship.Type.BATTLECRUISER,
         };
-        int[] sampleFleet = { 80, 80, 1000, 22, 220, 190, 240, 21, 61 };
-//        int[] sampleFleet = { 0, 0, 8000, 0, 0, 0, 0, 0, 0 };
+//        int[] sampleFleet = { 80, 80, 1000, 22, 220, 190, 240, 21, 61 };
+        int[] sampleFleet = { 0, 0, 10000, 0, 0, 0, 0, 0, 0 };
 
         int[][] population = new int[ POPULATION_SIZE ][ GEN_LENGTH ];
 
@@ -92,10 +95,10 @@ public class Main {
 
                 int gainSum = 0;
                 for ( CombatReport report : reports ) {
-                    gainSum += report.gainAttacker.toMetal( 1, 1, 1 ) / 1000;
+                    gainSum += report.gainAttacker.toMetal( 3, 2, 1 ) / 1000;
                 }
 
-                results.add( new Result( population[ popN ], gainSum / SIM_CNT, attacker.getFleetCost().toMetal( 1, 1, 1 ) / 1000 ) );
+                results.add( new Result( population[ popN ], gainSum / SIM_CNT, attacker.getFleetCost().toMetal( 3, 2, 1 ) / 1000 ) );
             }
 
             Collections.sort( results, new ResultCmp() );
@@ -123,7 +126,7 @@ public class Main {
 //                System.out.println( Arrays.toString(  arr  ) );
 //            }
 
-            population = crossed;
+            population = mutated;
             if ( i % 10 == 0 ) {
                 System.out.print( "." );
             }
